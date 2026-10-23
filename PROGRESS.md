@@ -36,7 +36,8 @@
 ## Done
 - Packet 0A: project start. The folders (src/ with six module folders, tests/, outputs/, docs/), README.md, .gitignore, AGENTS.md (the agent rules), PROGRESS.md (this file), and setup_project.m (adds the code folders to the MATLAB path).
 - Packet 1A: the sets and text conversion. define_sets (users, plaintext, ciphertext, keys, p and g), text_to_symbols and symbols_to_text, show_sets, demo_point1, and the test helpers (summarize_checks, test_sets, run_all_tests).
+- Packet 1B: the relations. define_relations (R1 = can talk with, the 6 channels in both directions; R2 = owns, one private key per user), pairs_to_matrix, relation_properties (reflexive, symmetric, antisymmetric, transitive, equivalence, partial order), function_properties (function, one-to-one, onto), show_relations, test_relations, and demo_point1 now shows the relations.
 
 ## Next
-- Planner: Packet 1B, the relations (who talks to whom, who owns which key) with their properties.
+- Planner: Packet 1C, encryption and decryption as functions, with their properties.
 - Owner: later, on the demo laptop, run version, ver, setup_project, run_all_tests and demo_point1, and send what you see.
