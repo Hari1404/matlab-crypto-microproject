@@ -242,7 +242,7 @@ pos2 = strfind(txt2, 'Checks:');
 c(end+1, :) = {'show_analysis on the split network: all 4 checks still say yes', numel(strfind(txt2(pos2(end):end), ': yes')) == 4};
 txt3 = evalc('show_analysis(G, 6, 1)');
 c(end+1, :) = {'show_analysis(G, 6, 1) prints the path Grace to Alice', ~isempty(strfind(txt3, 'Grace - Frank - Dave - Bob - Alice (length 4)'))};
-txt4 = evalc('demo_point2');
+txt4 = evalc('demo_point2(tempname(), ''off'')');
 c(end+1, :) = {'demo_point2 prints the title and the analysis', ~isempty(strfind(txt4, 'POINT 2 DEMO: THE GRAPH NETWORK')) && ~isempty(strfind(txt4, 'ANALYSIS OF THE COMMUNICATION NETWORK'))};
 
 summarize_checks('test_graph_analysis', c);

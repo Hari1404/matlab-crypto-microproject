@@ -5,5 +5,6 @@ test_relations();
 test_cipher();
 test_graph();
 test_graph_analysis();
+test_graph_pictures();
 fprintf('\nALL TESTS PASSED\n');
 end

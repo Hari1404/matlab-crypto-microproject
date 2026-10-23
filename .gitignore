@@ -9,3 +9,4 @@ codegen/
 .DS_Store
 Thumbs.db
 packets/*.zip
+outputs/*.png

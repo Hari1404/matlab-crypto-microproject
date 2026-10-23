@@ -11,7 +11,7 @@ This project simulates secure communication between users in MATLAB. It uses Set
 | Topic | What it models | Folder |
 | --- | --- | --- |
 | Sets, Relations and Functions | Users, plaintext, ciphertext and keys; key ownership; encryption and decryption as functions | `src/sets_relations_functions` |
-| Graph Theory | Communication network with users as vertices and channels as edges; adjacency matrix and list, connectivity, paths, reachability | `src/graph_network` |
+| Graph Theory | Communication network with users as vertices and channels as edges; adjacency matrix and list, connectivity, paths, cycles, bridge channels, cut users, pictures | `src/graph_network` |
 | Group Theory and Modular Arithmetic | Modular exponentiation, cyclic groups, generators, identity and inverse elements | `src/group_theory` |
 | Diffie–Hellman key exchange | A shared secret key over an insecure channel | `src/diffie_hellman` |
 | Encryption and decryption | Messages protected with the shared key | `src/encryption` |
@@ -23,7 +23,7 @@ The work is built in big checkpoints called points. The full list and the curren
 
 - [x] Point 0: Start (folders, rules, README, setup script)
 - [x] Point 1: Sets, Relations and Functions model
-- [ ] Point 2: Graph network (in progress: the graph, its adjacency matrix and list, and the analysis of connectivity, paths, cycles and removals are done; the pictures come next)
+- [x] Point 2: Graph network (the graph, its adjacency matrix and list, the analysis of connectivity, paths, cycles and removals, and the pictures)
 - [ ] Point 3: Group Theory and Modular Arithmetic core
 - [ ] Point 4: Diffie–Hellman and encryption
 - [ ] Point 5: The whole system and the demo
@@ -33,7 +33,7 @@ The work is built in big checkpoints called points. The full list and the curren
 
 1. Open MATLAB and set the current folder to this project folder.
 2. Run `setup_project` to add the code folders to the MATLAB path.
-3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, and `demo_point2` to see the communication network as a graph and its analysis. The full demo comes in a later point.
+3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, and `demo_point2` to see the communication network as a graph, its analysis and 5 pictures (they open in figure windows and are saved as PNG files in the `outputs` folder). The full demo comes in a later point.
 
 ## Note
 
