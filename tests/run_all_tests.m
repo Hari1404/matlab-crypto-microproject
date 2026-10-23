@@ -4,5 +4,6 @@ test_sets();
 test_relations();
 test_cipher();
 test_graph();
+test_graph_analysis();
 fprintf('\nALL TESTS PASSED\n');
 end
