@@ -1,2 +1,44 @@
-# matlab-crypto-microproject
-MATLAB-based public-key cryptography simulation using group theory and modular arithmetic: Diffie–Hellman key exchange, encryption/decryption, and graph-based network analysis.
+# MATLAB-Based Public-Key Cryptography and Secure Communication
+
+Micro-project for Alliance University, Alliance College of Engineering and Design.
+
+## About
+
+This project simulates secure communication between users in MATLAB. It uses Sets, Relations and Functions to model users, messages and keys, Graph Theory to model and analyse the communication network, and Group Theory with Modular Arithmetic to implement the Diffie–Hellman key exchange. Alice and Bob each choose a private key, exchange public values over an insecure channel, and arrive at the same shared secret, which is then used to encrypt and decrypt messages.
+
+## How the mathematics maps to the code
+
+| Topic | What it models | Folder |
+| --- | --- | --- |
+| Sets, Relations and Functions | Users, plaintext, ciphertext and keys; key ownership; encryption and decryption as functions | `src/sets_relations_functions` |
+| Graph Theory | Communication network with users as vertices and channels as edges; adjacency matrix and list, connectivity, paths, reachability | `src/graph_network` |
+| Group Theory and Modular Arithmetic | Modular exponentiation, cyclic groups, generators, identity and inverse elements | `src/group_theory` |
+| Diffie–Hellman key exchange | A shared secret key over an insecure channel | `src/diffie_hellman` |
+| Encryption and decryption | Messages protected with the shared key | `src/encryption` |
+| Integration | All modules working together as one system | `src/integration` |
+
+## Project status
+
+The work is built in big checkpoints called points. The full list and the current state are in `PROGRESS.md`.
+
+- [x] Point 0: Start (folders, rules, README, setup script)
+- [ ] Point 1: Sets, Relations and Functions model
+- [ ] Point 2: Graph network
+- [ ] Point 3: Group Theory and Modular Arithmetic core
+- [ ] Point 4: Diffie–Hellman and encryption
+- [ ] Point 5: The whole system and the demo
+- [ ] Point 6: Tests, figures, report and slides
+
+## How to run
+
+1. Open MATLAB and set the current folder to this project folder.
+2. Run `setup_project` to add the code folders to the MATLAB path.
+3. The demo script is added in a later point.
+
+## Note
+
+This is an educational project. Small numbers are used so every step can be checked by hand. It is not meant to protect real data.
+
+## Team
+
+Santanu Barua, M Hariharan, Kushi Pathak, P Abdul Wasim, Someshwar A, Adithya Sampath Kumar

@@ -1,0 +1,11 @@
+*.asv
+*.autosave
+*.mat
+slprj/
+codegen/
+*.mexw64
+*.mexa64
+*.mexmaci64
+.DS_Store
+Thumbs.db
+packets/*.zip
