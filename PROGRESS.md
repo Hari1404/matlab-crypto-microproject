@@ -11,7 +11,7 @@
 - Numbers: prime p = 97 and generator g = 5 (the powers of 5 give every number from 1 to 96). Everything works in the group Z_97* (the numbers 1 to 96 with multiplication mod 97).
 - Users: Alice, Bob, Carol, Dave, Frank, Grace (6 users). They are set in define_sets and can be changed there.
 - Alphabet: the 95 printable ASCII characters (space to ~). A character with code c is plaintext symbol c - 31, so symbols are 1 to 95. Ciphertext values are 1 to 96. The key set K is 1 to 96.
-- Cipher (planned, built in Points 1 and 4): encryption E_k(m) = k*m mod 97 and decryption uses the inverse of k mod 97. The shared Diffie-Hellman secret is the key k itself.
+- Cipher: encryption E_k(m) = k*m mod 97 and decryption D_k(c) = j*c mod 97, where j is the inverse of k mod 97. The functions are built in Point 1 (encrypt_symbols, decrypt_symbols, encrypt_text, decrypt_text, key_inverse). In Point 4 the shared Diffie-Hellman secret becomes the key k. The ciphertext value 96 is in C but is not a plaintext symbol, so decrypt_symbols stops with an error when a result would be 96 (this happens with a wrong key).
 - Code style: it must run in desktop MATLAB and also in GNU Octave. Use only simple base functions, single-quoted text, no toolboxes, and plain ASCII characters in .m files. The planner tests in Octave; the real MATLAB run is at the end.
 - The owner has no MATLAB on the working laptop. Antigravity skips the MATLAB checks. All real MATLAB runs happen later on the demo laptop.
 - Tests: tests/test_<name>.m are functions; each prints PASS or FAIL lines through summarize_checks. run_all_tests runs them all and ends with ALL TESTS PASSED.
@@ -37,7 +37,8 @@
 - Packet 0A: project start. The folders (src/ with six module folders, tests/, outputs/, docs/), README.md, .gitignore, AGENTS.md (the agent rules), PROGRESS.md (this file), and setup_project.m (adds the code folders to the MATLAB path).
 - Packet 1A: the sets and text conversion. define_sets (users, plaintext, ciphertext, keys, p and g), text_to_symbols and symbols_to_text, show_sets, demo_point1, and the test helpers (summarize_checks, test_sets, run_all_tests).
 - Packet 1B: the relations. define_relations (R1 = can talk with, the 6 channels in both directions; R2 = owns, one private key per user), pairs_to_matrix, relation_properties (reflexive, symmetric, antisymmetric, transitive, equivalence, partial order), function_properties (function, one-to-one, onto), show_relations, test_relations, and demo_point1 now shows the relations.
+- Packet 1C: encryption and decryption as functions. key_inverse (simple search, Point 3 adds the fast method), encrypt_symbols, decrypt_symbols, encrypt_text, decrypt_text, cipher_relation (E_k as a relation from P to C), show_cipher (function, one-to-one, onto, and D_k undoes E_k), test_cipher, and demo_point1 now shows the cipher with the example key 85. README updated. POINT 1 IS FINISHED.
 
 ## Next
-- Planner: Packet 1C, encryption and decryption as functions, with their properties.
+- Planner: Point 2, Packet 2A: the graph network (users as vertices, the 6 channels from define_relations as edges, adjacency matrix and adjacency list).
 - Owner: later, on the demo laptop, run version, ver, setup_project, run_all_tests and demo_point1, and send what you see.
