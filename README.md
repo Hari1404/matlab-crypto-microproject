@@ -23,7 +23,7 @@ The work is built in big checkpoints called points. The full list and the curren
 
 - [x] Point 0: Start (folders, rules, README, setup script)
 - [x] Point 1: Sets, Relations and Functions model
-- [ ] Point 2: Graph network
+- [ ] Point 2: Graph network (in progress: the graph, its adjacency matrix and list are done)
 - [ ] Point 3: Group Theory and Modular Arithmetic core
 - [ ] Point 4: Diffie–Hellman and encryption
 - [ ] Point 5: The whole system and the demo
@@ -33,7 +33,7 @@ The work is built in big checkpoints called points. The full list and the curren
 
 1. Open MATLAB and set the current folder to this project folder.
 2. Run `setup_project` to add the code folders to the MATLAB path.
-3. Run `run_all_tests` to check everything, and `demo_point1` to see the sets, relations and functions of Point 1. The full demo comes in a later point.
+3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, and `demo_point2` to see the communication network as a graph. The full demo comes in a later point.
 
 ## Note
 

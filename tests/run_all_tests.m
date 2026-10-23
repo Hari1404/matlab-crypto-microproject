@@ -3,5 +3,6 @@ function run_all_tests()
 test_sets();
 test_relations();
 test_cipher();
+test_graph();
 fprintf('\nALL TESTS PASSED\n');
 end
