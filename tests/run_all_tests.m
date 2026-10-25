@@ -7,5 +7,6 @@ test_graph();
 test_graph_analysis();
 test_graph_pictures();
 test_modular();
+test_group();
 fprintf('\nALL TESTS PASSED\n');
 end

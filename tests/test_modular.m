@@ -277,7 +277,10 @@ c(end+1, :) = {'show_modular ends with 5 check lines that all say yes', numel(st
 txt2 = evalc('demo_point3()');
 c(end+1, :) = {'demo_point3 prints its title and the tools', ~isempty(strfind(txt2, 'POINT 3 DEMO: GROUP THEORY AND MODULAR ARITHMETIC')) && ~isempty(strfind(txt2, '=== MODULAR ARITHMETIC TOOLS ==='))};
 pos2 = strfind(txt2, 'Checks:');
-c(end+1, :) = {'demo_point3 has 5 check lines that all say yes and none says NO', numel(strfind(txt2(pos2(end):end), ': yes')) == 5 && isempty(strfind(txt2, ': NO'))};
+first = txt2(pos2(1):end);
+stop = strfind(first, '=== ');
+first = first(1:(stop(1) - 1));
+c(end+1, :) = {'demo_point3 starts with a Checks block of 5 lines that all say yes, and none says NO', numel(strfind(first, ': yes')) == 5 && isempty(strfind(txt2, ': NO'))};
 
 summarize_checks('test_modular', c);
 end
