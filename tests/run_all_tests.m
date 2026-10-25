@@ -15,5 +15,6 @@ test_main_demo();
 test_route_picture();
 test_verification();
 test_rsa();
+test_rsa_users();
 fprintf('\nALL TESTS PASSED\n');
 end

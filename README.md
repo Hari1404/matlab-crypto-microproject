@@ -16,7 +16,7 @@ This project simulates secure communication between users in MATLAB. It uses Set
 | Diffie–Hellman key exchange | A shared secret key over an insecure channel | `src/diffie_hellman` |
 | Encryption and decryption | Messages protected with the shared key | `src/encryption` |
 | Integration | All modules working together as one system | `src/integration` |
-| RSA public-key encryption | RSA key pairs from two primes, encryption and decryption of numbers and text, why it works in the group Z_n* | `src/rsa` |
+| RSA public-key encryption | RSA key pairs from two primes, encryption and decryption of numbers and text, why it works in the group Z_n*; the RSA keys of all users and their messages, key transport (an RSA-encrypted key of the cipher) and an eavesdropper who factors n | `src/rsa` |
 
 ## Project status
 
@@ -29,13 +29,13 @@ The work is built in big checkpoints called points. The full list and the curren
 - [x] Point 4: Diffie–Hellman and encryption (the key exchange for all users, encryption and decryption with the shared key, and an eavesdropper who attacks the key exchange and the cipher)
 - [x] Point 5: The whole system and the demo (the keys on the channels, the messages along the paths, `demo_point5`, and `main_demo` with typed prompts and a picture of the route)
 - [ ] Point 6: Tests, figures, report and slides (done so far: `demo_point6`, the verification of the shared key, the decryption and the graph)
-- [ ] Point 7: RSA public-key encryption (done so far: the RSA keys from two primes, encryption and decryption of numbers and text, why it works in the group Z_n*, `demo_point7`)
+- [ ] Point 7: RSA public-key encryption (done so far: the RSA keys from two primes, encryption and decryption of numbers and text, why it works in the group Z_n*, the RSA keys of the 6 users and their messages, the key transport, an eavesdropper who factors n or uses a list of all small numbers, `demo_point7`)
 
 ## How to run
 
 1. Open MATLAB and set the current folder to this project folder.
 2. Run `setup_project` to add the code folders to the MATLAB path.
-3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, `demo_point2` to see the communication network as a graph, its analysis and 5 pictures (they open in figure windows and are saved as PNG files in the `outputs` folder), and `demo_point3` to see the modular arithmetic tools and the group Z_97* (fast modular powers, gcd and inverse, the group rules, orders, generators and cyclic subgroups), and `demo_point4` to see the Diffie-Hellman key exchange (Alice and Bob, then all users), the encryption with the shared key and an eavesdropper, `demo_point5` to see the secure network (a key on every channel and messages along the paths), `demo_point6` to see the verification (the shared keys, the decryption and the graph are checked a second way: 21 checks in 3 tables), `demo_point7` to see RSA public-key encryption (the keys from two primes, a number and a text encrypted and decrypted, why it works in the group Z_n*, a wrong key: 8 checks), and `main_demo` for the demo with typed prompts (you choose the users and type the messages, they travel along the route, you can break and repair channels, and option 7 draws the picture of the network with the route; the picture opens in a figure window and is saved as `outputs/point5_route.png`).
+3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, `demo_point2` to see the communication network as a graph, its analysis and 5 pictures (they open in figure windows and are saved as PNG files in the `outputs` folder), and `demo_point3` to see the modular arithmetic tools and the group Z_97* (fast modular powers, gcd and inverse, the group rules, orders, generators and cyclic subgroups), and `demo_point4` to see the Diffie-Hellman key exchange (Alice and Bob, then all users), the encryption with the shared key and an eavesdropper, `demo_point5` to see the secure network (a key on every channel and messages along the paths), `demo_point6` to see the verification (the shared keys, the decryption and the graph are checked a second way: 21 checks in 3 tables), `demo_point7` to see RSA public-key encryption (the keys from two primes, a number and a text encrypted and decrypted, why it works in the group Z_n*, a wrong key; then the RSA keys of the 6 users and their messages, the key transport and the eavesdropper: 4 blocks with 34 checks in all), and `main_demo` for the demo with typed prompts (you choose the users and type the messages, they travel along the route, you can break and repair channels, and option 7 draws the picture of the network with the route; the picture opens in a figure window and is saved as `outputs/point5_route.png`).
 
 ## Note
 
