@@ -9,5 +9,6 @@ test_graph_pictures();
 test_modular();
 test_group();
 test_dh();
+test_encryption();
 fprintf('\nALL TESTS PASSED\n');
 end

@@ -177,8 +177,14 @@ c(end+1, :) = {'show_dh also works for p = 101 with g = 2', ~isempty(strfind(txt
 % --- demo_point4 ---
 txt2 = evalc('demo_point4()');
 c(end+1, :) = {'demo_point4 prints its title and the key exchange', ~isempty(strfind(txt2, 'POINT 4 DEMO: DIFFIE-HELLMAN KEY EXCHANGE AND ENCRYPTION')) && ~isempty(strfind(txt2, '=== DIFFIE-HELLMAN KEY EXCHANGE ==='))};
-pos2 = strfind(txt2, 'Checks:');
-c(end+1, :) = {'demo_point4 has 7 check lines that all say yes and none says NO', numel(pos2) == 1 && numel(strfind(txt2(pos2(1):end), ': yes')) == 7 && isempty(strfind(txt2, ': NO'))};
+cut = strfind(txt2, '=== ENCRYPTION WITH THE SHARED KEY ===');
+if isempty(cut)
+    first = '';
+else
+    first = txt2(1:cut(1) - 1);
+end
+pos2 = strfind(first, 'Checks:');
+c(end+1, :) = {'demo_point4 starts with the key exchange: it has 7 check lines that all say yes before the encryption part', numel(pos2) == 1 && numel(strfind(first(pos2(1):end), ': yes')) == 7 && isempty(strfind(first, ': NO'))};
 
 summarize_checks('test_dh', c);
 end
