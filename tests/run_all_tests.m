@@ -10,5 +10,6 @@ test_modular();
 test_group();
 test_dh();
 test_encryption();
+test_system();
 fprintf('\nALL TESTS PASSED\n');
 end
