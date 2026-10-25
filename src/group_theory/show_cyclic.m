@@ -80,7 +80,7 @@ for a = 1:n
     ok_divides = ok_divides && (mod(n, ord(a)) == 0);
     ok_gen = ok_gen && (is_generator(a, p) == (ord(a) == n));
     Ha = cyclic_subgroup(a, p);
-    ok_sub = ok_sub && (numel(Ha) == ord(a)) && all(ismember(mod(Ha' * Ha, p), Ha));
+    ok_sub = ok_sub && (numel(Ha) == ord(a)) && all(all(ismember(mod(Ha' * Ha, p), Ha)));
 end
 ok_count = (numel(gens) == sum(gcd(1:n, n) == 1));
 ok_phi = true;

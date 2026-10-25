@@ -249,7 +249,7 @@ ok = true;
 for p = [2 3 5 7 11 13 97 101 257]
     for a = 1:(p - 1)
         Ha = cyclic_subgroup(a, p);
-        ok = ok && numel(Ha) == element_order(a, p) && Ha(1) == 1 && numel(unique(Ha)) == numel(Ha) && all(ismember(mod(Ha' * Ha, p), Ha)) && mod(Ha(end) * a, p) == 1;
+        ok = ok && numel(Ha) == element_order(a, p) && Ha(1) == 1 && numel(unique(Ha)) == numel(Ha) && all(all(ismember(mod(Ha' * Ha, p), Ha))) && mod(Ha(end) * a, p) == 1;
     end
 end
 c(end+1, :) = {'each cyclic subgroup starts with 1, has no repeats, is closed, and the order is its size (primes 2 to 257)', ok};
