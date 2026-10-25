@@ -11,5 +11,6 @@ test_group();
 test_dh();
 test_encryption();
 test_system();
+test_main_demo();
 fprintf('\nALL TESTS PASSED\n');
 end
