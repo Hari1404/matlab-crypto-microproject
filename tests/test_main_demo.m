@@ -53,12 +53,12 @@ c(end+1, :) = {'show_route: no route, names the 2 groups and says who knows the 
 
 % --- main_demo: quit and the menu ---
 o = evalc('main_demo({''0''})');
-c(end+1, :) = {'main_demo: title, users, p and g, the menu with 7 lines', has(o, '##### MAIN DEMO: THE SECURE NETWORK #####') && has(o, 'Users: Alice, Bob, Carol, Dave, Frank, Grace') && has(o, 'p = 97 and g = 5.') && has(o, '  6  The whole report (show_system)') && has(o, '  0  Quit')};
+c(end+1, :) = {'main_demo: title, users, p and g, the menu with 8 lines', has(o, '##### MAIN DEMO: THE SECURE NETWORK #####') && has(o, 'Users: Alice, Bob, Carol, Dave, Frank, Grace') && has(o, 'p = 97 and g = 5.') && has(o, '  6  The whole report (show_system)') && has(o, '  7  Picture of the network (with the route of the last message)') && has(o, '  0  Quit')};
 c(end+1, :) = {'main_demo: quit at once, 0 sent and 0 arrived, goodbye', has(o, 'Messages sent: 0. Messages that arrived: 0.') && has(o, 'Goodbye.')};
 o = evalc('main_demo({'' 0 ''})');
 c(end+1, :) = {'main_demo: spaces around the 0 still quit', has(o, 'Goodbye.')};
-o = evalc('main_demo({'''', ''9'', ''x'', ''01'', ''-1'', ''7'', ''0''})');
-c(end+1, :) = {'main_demo: a bad menu answer asks again (empty, 9, x, 01, -1, 7)', numel(strfind(o, 'Please type a number from 0 to 6.')) == 6 && has(o, 'Goodbye.')};
+o = evalc('main_demo({'''', ''9'', ''x'', ''01'', ''-1'', ''8'', ''0''})');
+c(end+1, :) = {'main_demo: a bad menu answer asks again (empty, 9, x, 01, -1, 8)', numel(strfind(o, 'Please type a number from 0 to 7.')) == 6 && has(o, 'Goodbye.')};
 o1 = evalc('main_demo({''1'', ''Alice'', ''Grace'', ''Hi'', ''0''})');
 o2 = evalc('main_demo({''1'', ''Alice'', ''Grace'', ''Hi'', ''0''})');
 c(end+1, :) = {'main_demo: the same answers give the same text twice', strcmp(o1, o2)};
@@ -79,7 +79,7 @@ alltext = char(32:126);
 o = evalc('main_demo({''1'', ''Carol'', ''Frank'', alltext, ''0''})');
 c(end+1, :) = {'main_demo: a message with all 95 printable characters arrives', has(o, 'It is the same as the message: yes') && has(o, ['Frank gets: ' alltext nl]) && has(o, 'Messages sent: 1. Messages that arrived: 1.')};
 o = evalc('main_demo({''9'', ''1'', ''Zed'', ''Alice'', ''7'', ''Alice'', ''Bob'', '''', [''a'' char(9)], ''Hi'', ''0''})');
-c(end+1, :) = {'main_demo: bad sender, bad receiver, same user, empty text and a tab ask again', has(o, 'Please type a number from 0 to 6.') && numel(strfind(o, 'Please type a user number from 1 to 6')) == 2 && has(o, 'Please choose a different user than Alice.') && has(o, 'Please type at least one character.') && has(o, 'Please use only the 95 printable characters (space to ~).') && has(o, 'Bob gets: Hi') && has(o, 'Messages sent: 1. Messages that arrived: 1.')};
+c(end+1, :) = {'main_demo: bad sender, bad receiver, same user, empty text and a tab ask again', has(o, 'Please type a number from 0 to 7.') && numel(strfind(o, 'Please type a user number from 1 to 6')) == 2 && has(o, 'Please choose a different user than Alice.') && has(o, 'Please type at least one character.') && has(o, 'Please use only the 95 printable characters (space to ~).') && has(o, 'Bob gets: Hi') && has(o, 'Messages sent: 1. Messages that arrived: 1.')};
 
 % --- main_demo: key exchange ---
 o = evalc('main_demo({''2'', ''Alice'', ''Bob'', ''0''})');

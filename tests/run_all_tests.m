@@ -12,5 +12,6 @@ test_dh();
 test_encryption();
 test_system();
 test_main_demo();
+test_route_picture();
 fprintf('\nALL TESTS PASSED\n');
 end

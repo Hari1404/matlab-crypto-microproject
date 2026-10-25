@@ -1,11 +1,26 @@
-function main_demo(answers)
-% MAIN_DEMO The secure network with typed prompts: choose users and texts, send messages along the route, break and repair channels.
-%   main_demo()         asks for every answer on the keyboard.
-%   main_demo(answers)  uses the cell array of texts answers instead of the keyboard (for the tests and for a scripted run).
+function main_demo(answers, visible, outdir)
+% MAIN_DEMO The secure network with typed prompts: choose users and texts, send messages along the route, break and repair channels, draw the picture of the route.
+%   main_demo()                      asks for every answer on the keyboard.
+%   main_demo(answers)               uses the cell array of texts answers instead of the keyboard (for the tests and for a scripted run).
+%   main_demo(answers, visible, outdir)  visible is 'on' (default: the picture opens in a figure window) or 'off' (the picture is saved
+%                                    and no window stays open); outdir is the folder for the picture (default: the outputs folder).
 %   Menu: 1 send a message, 2 key exchange of two users, 3 the channels and their keys, 4 break a channel,
-%   5 repair all channels, 6 the whole report (show_system), 0 quit.
+%   5 repair all channels, 6 the whole report (show_system), 7 the picture of the network with the route of the last message, 0 quit.
+%   The route of the last message is forgotten when a channel is broken or repaired, so the picture never shows an old route.
 if nargin < 1
     answers = {};
+end
+if nargin < 2
+    visible = 'on';
+end
+if nargin < 3
+    outdir = '';
+end
+if ~ischar(visible) || ~(strcmp(visible, 'on') || strcmp(visible, 'off'))
+    error('main_demo:visible', 'visible must be the text on or the text off.');
+end
+if ~ischar(outdir)
+    error('main_demo:outdir', 'outdir must be a text (the name of a folder).');
 end
 Y0 = define_system();
 Y = Y0;
@@ -15,6 +30,8 @@ names = Y0.users;
 k = 1;
 sent = 0;
 arrived = 0;
+last = [];
+fig = [];
 fprintf('\n##### MAIN DEMO: THE SECURE NETWORK #####\n');
 fprintf('Users: %s\n', format_names(names, 1:Y0.n));
 fprintf('Every channel has its own key, made by a Diffie-Hellman exchange of its two users. p = %d and g = %d.\n', p, g);
@@ -27,6 +44,7 @@ while running
     fprintf('  4  Break a channel\n');
     fprintf('  5  Repair all channels\n');
     fprintf('  6  The whole report (show_system)\n');
+    fprintf('  7  Picture of the network (with the route of the last message)\n');
     fprintf('  0  Quit\n');
     [s, k] = read_answer('Your choice: ', answers, k);
     s = strtrim(s);
@@ -49,6 +67,7 @@ while running
         end
         R = route_message(txt, i, j, Y);
         show_route(R, Y);
+        last = R;
         sent = sent + 1;
         arrived = arrived + double(R.delivered);
     elseif strcmp(s, '2')
@@ -87,6 +106,7 @@ while running
         [j, k] = pick_user(Y, 'Second user of the channel: ', answers, k, i);
         if Y.A(i, j)
             Y.A = remove_channel(Y.A, i, j);
+            last = [];
             [comp, kk] = connected_components(Y.A);
             fprintf('  The channel %s - %s is broken.\n', names{i}, names{j});
             fprintf('  The network has %d group%s: %s\n', kk, plural_s(kk), format_groups(names, comp));
@@ -100,6 +120,7 @@ while running
         if nb == 0
             fprintf('  No channel was broken.\n');
         else
+            last = [];
             fprintf('  %d channel%s repaired. The network is whole again.\n', nb, plural_s(nb));
         end
     elseif strcmp(s, '6')
@@ -107,8 +128,23 @@ while running
             fprintf('\n(The report is about the whole network, not about the broken channels.)\n');
         end
         show_system(Y0);
+    elseif strcmp(s, '7')
+        fprintf('\n--- The picture of the network ---\n');
+        if isempty(last)
+            fprintf('  There is no route to show: no message was sent since the start or since the last change of the channels. The picture shows the network as it is now.\n');
+        end
+        if ~isempty(fig) && ishghandle(fig)
+            close(fig);
+        end
+        [file, ttl, fig] = show_route_picture(Y, last, visible, outdir);
+        fprintf('  Picture: %s\n', ttl);
+        if strcmp(visible, 'on')
+            fprintf('  The picture is in a figure window and saved as %s.\n', file);
+        else
+            fprintf('  The picture is saved as %s.\n', file);
+        end
     else
-        fprintf('  Please type a number from 0 to 6.\n');
+        fprintf('  Please type a number from 0 to 7.\n');
     end
 end
 fprintf('\nMessages sent: %d. Messages that arrived: %d.\n', sent, arrived);
