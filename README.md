@@ -25,7 +25,7 @@ The work is built in big checkpoints called points. The full list and the curren
 - [x] Point 1: Sets, Relations and Functions model
 - [x] Point 2: Graph network (the graph, its adjacency matrix and list, the analysis of connectivity, paths, cycles and removals, and the pictures)
 - [x] Point 3: Group Theory and Modular Arithmetic core (fast modular exponentiation, gcd and inverse, primes, the group rules for Z_97*, orders, generators and cyclic subgroups)
-- [ ] Point 4: Diffie–Hellman and encryption
+- [ ] Point 4: Diffie–Hellman and encryption (in progress: the key exchange between two users and the table of keys for all users are done; encryption with the shared key comes next)
 - [ ] Point 5: The whole system and the demo
 - [ ] Point 6: Tests, figures, report and slides
 
@@ -33,7 +33,7 @@ The work is built in big checkpoints called points. The full list and the curren
 
 1. Open MATLAB and set the current folder to this project folder.
 2. Run `setup_project` to add the code folders to the MATLAB path.
-3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, `demo_point2` to see the communication network as a graph, its analysis and 5 pictures (they open in figure windows and are saved as PNG files in the `outputs` folder), and `demo_point3` to see the modular arithmetic tools and the group Z_97* (fast modular powers, gcd and inverse, the group rules, orders, generators and cyclic subgroups). The full demo comes in a later point.
+3. Run `run_all_tests` to check everything, `demo_point1` to see the sets, relations and functions of Point 1, `demo_point2` to see the communication network as a graph, its analysis and 5 pictures (they open in figure windows and are saved as PNG files in the `outputs` folder), and `demo_point3` to see the modular arithmetic tools and the group Z_97* (fast modular powers, gcd and inverse, the group rules, orders, generators and cyclic subgroups), and `demo_point4` to see the Diffie-Hellman key exchange (Alice and Bob, then all users). The full demo comes in a later point.
 
 ## Note
 
