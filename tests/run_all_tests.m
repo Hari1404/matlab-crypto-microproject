@@ -13,5 +13,6 @@ test_encryption();
 test_system();
 test_main_demo();
 test_route_picture();
+test_verification();
 fprintf('\nALL TESTS PASSED\n');
 end
