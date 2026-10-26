@@ -213,7 +213,7 @@ Three attackers are simulated. `eavesdrop_dh` sees $p$, $g$, $A$ and $B$ and com
 
 ## The test suite
 
-Every part has a test file of automatic checks that print PASS or FAIL lines. All 15 test files that need no figure window were run in GNU Octave 8.4 and every check passed.
+Every part has a test file of automatic checks that print PASS or FAIL lines. All 15 test files that need no figure window were run in GNU Octave 8.4 and every check passed (Table 3); the full suite was also run in MATLAB Online (see below the table).
 
 | Test file | Part tested | Checks passed |
 |:--|:--|:--:|
@@ -236,7 +236,7 @@ Every part has a test file of automatic checks that print PASS or FAIL lines. Al
 
 Table: Table 3. Results of the test suite in GNU Octave 8.4.
 
-Four more test files (`test_graph_analysis`, `test_graph_pictures`, `test_digraph_pictures` and `test_route_picture`) draw figures and are run in MATLAB by the team. `test_digraph_pictures` (26 checks) was also run once in GNU Octave with the gnuplot graphics toolkit, where all 26 passed; this is not a MATLAB run. The tests never write into the `outputs` folder: the pictures are drawn with the figure hidden and saved in a temporary folder. The tests also check that bad input is refused, for example a prime $p$ that is not prime, a generator that is not a generator, a secret number out of range, or a text with a character outside the alphabet.
+Four more test files (`test_graph_analysis` 120 checks, `test_graph_pictures` 129, `test_digraph_pictures` 26 and `test_route_picture` 64) draw figures, so they were not part of the Octave run above. The whole suite, `run_all_tests` with all 19 test files, was run in MATLAB Online and ended with ALL TESTS PASSED (1,196 + 339 = 1,535 checks in all). The demos `demo_point2`, `demo_point2d` and `main_demo` were also run in MATLAB Online, and Figures 6 to 14 are the PNG files they saved. The tests never write into the `outputs` folder: the pictures are drawn with the figure hidden and saved in a temporary folder. The tests also check that bad input is refused, for example a prime $p$ that is not prime, a generator that is not a generator, a secret number out of range, or a text with a character outside the alphabet.
 
 ## The Diffie–Hellman key exchange
 
@@ -324,13 +324,11 @@ The directed version of the network (`demo_point2d`, `show_digraph`) has the sam
 
 The directions change the distances. From Alice to Carol the shortest directed path is Alice → Bob → Dave → Carol (3 arcs), while from Carol to Alice it is the single arc Carol → Alice (1 arc), so the distance table is not symmetric. From Alice to Grace the path is Alice → Bob → Dave → Frank → Grace (4 arcs), but Grace has no arc leaving her, so there is no path from Grace to anybody else. Alice, Bob, Carol, Dave and Frank can reach all six users, and Grace can reach only herself.
 
-Therefore the digraph has two strongly connected components, {Alice, Bob, Carol, Dave, Frank} and {Grace}, and one weakly connected component (the same single group as the undirected graph). The directed cycle Alice → Bob → Dave → Carol → Alice keeps the first five users together. `show_digraph` ends with eight checks, and all of them say yes in the Octave run. One of them compares the reachable users found by breadth-first search with those found by Warshall's algorithm, and another compares the strong components with the groups found from the Warshall matrix. The tests also check the numbers above, the refusal of bad arc lists, a digraph with all channels two-way (strongly connected, symmetric matrix) and a digraph with only one-way channels (six components of one user each).
+Therefore the digraph has two strongly connected components, {Alice, Bob, Carol, Dave, Frank} and {Grace}, and one weakly connected component (the same single group as the undirected graph). The directed cycle Alice → Bob → Dave → Carol → Alice keeps the first five users together. `show_digraph` ends with eight checks, and all of them say yes, both in the Octave run and in the MATLAB Online run. One of them compares the reachable users found by breadth-first search with those found by Warshall's algorithm, and another compares the strong components with the groups found from the Warshall matrix. The tests also check the numbers above, the refusal of bad arc lists, a digraph with all channels two-way (strongly connected, symmetric matrix) and a digraph with only one-way channels (six components of one user each).
 
 ## Figures of the network
 
 Eight pictures show the network of the six users. Figures 6 to 10 are made by `demo_point2`, Figure 11 by option 7 of `main_demo`, and Figures 12 to 14 (the directed graph) by `demo_point2d`. In every picture the users keep the places that `graph_layout` gives for the whole network, so only the colors, the line widths, the line styles and the title change from one picture to the next. The channels are numbered e1 to e6 in the order Alice–Bob, Alice–Carol, Bob–Dave, Carol–Dave, Dave–Frank and Frank–Grace.
-
-*Note on these figures.* Figures 12 to 14 are the PNG files that the project function `save_digraph_pictures` wrote when it was run in GNU Octave with the gnuplot graphics toolkit; they are drawn by the real drawing code but not by MATLAB, and they will be replaced by the PNG files of `demo_point2d` after the run on the demo laptop. The six other pictures in this version of the report were not copied from MATLAB windows. A separate plotting script (`handoff/make_figures.py`) drew them from the places, colors, line widths and titles that the MATLAB functions `graph_layout`, `picture_options` and `route_picture_options` compute (these values were read out with GNU Octave, which cannot open figure windows). They have the layout and the colors of `draw_network`, and they will be replaced by the PNG files that `demo_point2` and `main_demo` save in MATLAB (same file names) after the run on the demo laptop.
 
 ![Figure 6. The communication network: the users are the vertices and the six channels are the edges (`point2_network.png`).](docs/report_figures/point2_network.png){width=14cm}
 
