@@ -40,7 +40,7 @@ TOCMARKER
 
 This project builds a small but complete simulation of secure communication in MATLAB. A network of six users (Alice, Bob, Carol, Dave, Frank and Grace) is joined by six communication channels. Every channel is protected by its own secret key, and that key is never sent: the two users at the ends of the channel create it with the Diffie–Hellman key exchange in the cyclic group $\mathbb{Z}_{97}^{*}$. The key then drives a cipher, and a message travels hop by hop along the shortest path found by breadth-first search. RSA public-key encryption is added as a second use of the same mathematics, including the transport of a cipher key under an RSA public key.
 
-Four areas of discrete mathematics are used as working tools and not only as theory: sets, relations and functions model users, symbols, keys and the cipher; graph theory models and analyses the network; group theory and modular arithmetic give the key exchange and RSA; and number theory (Euclid's algorithm, fast exponentiation, Lagrange's theorem) supplies the algorithms. The code has 116 files (about 4,650 lines of base MATLAB with no toolboxes), a test suite of 1,094 automatic checks in 14 test files that all pass in GNU Octave 8.4, and a verification layer that checks every important result a second way with code that shares nothing with the part it checks. Eavesdroppers are simulated on purpose: they break the small examples, which shows why real systems need large numbers. The project is an educational model and not a security product.
+Four areas of discrete mathematics are used as working tools and not only as theory: sets, relations and functions model users, symbols, keys and the cipher; graph theory models and analyses the network; group theory and modular arithmetic give the key exchange and RSA; and number theory (Euclid's algorithm, fast exponentiation, Lagrange's theorem) supplies the algorithms. The code has 128 files (about 5,260 lines of base MATLAB with no toolboxes), a test suite of 1,196 automatic checks in 15 test files that all pass in GNU Octave 8.4, and a verification layer that checks every important result a second way with code that shares nothing with the part it checks. Eavesdroppers are simulated on purpose: they break the small examples, which shows why real systems need large numbers. The project is an educational model and not a security product.
 
 **Keywords:** Diffie–Hellman, RSA, cyclic group, modular arithmetic, graph theory, secure communication, MATLAB.
 
@@ -92,7 +92,11 @@ $$\text{cycle rank}=|E|-|V|+c,$$
 
 where $c$ is the number of components. A **bridge** is an edge whose removal increases the number of components, and a **cut vertex** is a vertex with the same property. In a communication network they are the weak points: if a bridge channel breaks, some users can no longer reach each other.
 
-*Undirected and directed graphs.* A channel carries messages in both directions, and $R_1$ is symmetric, so an undirected graph is the right model for this network. A directed graph (with arcs $u\to v$) is the right model when traffic or trust goes one way only. The code in this project uses undirected graphs.
+*Undirected and directed graphs.* A channel carries messages in both directions, and $R_1$ is symmetric, so the undirected graph $G$ above is the main model of the network. A **directed graph** (digraph) $D=(V,A)$ is the right model when a channel works in one direction only. Its edges are **arcs** $u\to v$ (user $u$ can send to user $v$), its adjacency matrix has $A_{uv}=1$ for the arc $u\to v$ and is in general not symmetric, and a two-way channel is the two arcs $u\to v$ and $v\to u$. Every vertex has an **out-degree** (arcs leaving it) and an **in-degree** (arcs entering it), and since every arc leaves one vertex and enters one vertex,
+
+$$\sum_{v\in V}\deg^{+}(v)=\sum_{v\in V}\deg^{-}(v)=|A|.$$
+
+The **directed distance** from $u$ to $v$ is the number of arcs of a shortest directed path, and it can differ from the distance from $v$ to $u$ or be infinite in one direction only. Two vertices are in the same **strongly connected component** when each can be reached from the other along arcs; the **weakly connected components** are the components of the graph that is left when the directions are ignored. The reachability of all pairs can also be found with **Warshall's algorithm**, which for $k=1,\dots,n$ adds the path $i\to k\to j$ whenever both $i\to k$ and $k\to j$ are known. The project models the network both ways: as the undirected graph $G$ and as a directed version $D$ of the same six channels (Section 5.7).
 
 ## Modular arithmetic
 
@@ -152,14 +156,14 @@ The program has seven modules in `src/`, one folder each. They are built in the 
 | Module (folder in `src/`) | Models | Files | Lines |
 |:--|:--|:--:|:--:|
 | `sets_relations_functions` | Users, symbols, keys; $R_1$, $R_2$; $E_k$ and $D_k$ | 17 | 434 |
-| `graph_network` | Graph, adjacency matrix and list, BFS, paths, cycles, bridges, pictures | 31 | 931 |
+| `graph_network` | Graph and directed graph, adjacency matrix and list, BFS, paths, cycles, bridges, strong components, pictures | 43 | 1,543 |
 | `group_theory` | Fast power, gcd, inverse, primes, $\mathbb{Z}_{97}^{*}$, orders, generators | 17 | 631 |
 | `diffie_hellman` | Public values, shared keys, key table, eavesdropper on the key exchange | 9 | 225 |
 | `encryption` | Messages with the shared key, eavesdropper on the cipher | 5 | 283 |
 | `integration` | Keys on channels, routing, typed demo, route picture, verification | 17 | 994 |
 | `rsa` | RSA keys, text, users, key transport, eavesdroppers, verification | 20 | 1,149 |
 
-Table: Table 2. The modules of the code (116 files, 4,647 lines in all; the tests add 20 files and 3,654 lines).
+Table: Table 2. The modules of the code (128 files, 5,259 lines in all; the tests add 22 files and 3,947 lines).
 
 ![Figure 1. The architecture of the modules and how data moves between them.](docs/flowcharts/flowchart5_architecture.png){width=13cm}
 
@@ -176,6 +180,8 @@ Every function is in its own file, and the file name is the function name. Funct
 ## The graph (module `graph_network`)
 
 `define_graph` builds the graph from $R_1$ and stores each edge once as $[i\ j]$ with $i<j$. `bfs_search` visits the neighbours of a vertex in increasing order, so the shortest path shown is always the same one. `shortest_path`, `distance_matrix`, `connected_components`, `cycle_rank` and `find_cycle` follow the definitions of Section 2.2. `bridge_channels` and `cut_users` remove each channel or user in turn and count the components. `graph_layout` fixes the place of every user (the users are drawn in layers by distance from the first user of a group), so a picture of the same network always looks the same, and `draw_network` draws the picture. Five pictures are made: the network, the shortest path, a shortest cycle, the weak points (bridges red, cut users orange) and the network after the first bridge is removed.
+
+The directed version is built by `define_digraph`, which gives each of the six channels one arc or two arcs (the default is a list of 8 arcs, sorted by tail and then head, so the arc numbers a1 to a8 never change) and refuses an arc between users without a channel. `bfs_search`, `shortest_path`, `distance_matrix` and `reachable_from` follow the row of the adjacency matrix, which holds the arcs that leave a vertex, so they work on a digraph without any change. `strong_components` puts two users in one group when each is reachable from the other. `show_digraph` prints the whole digraph and checks it, among other ways with Warshall's algorithm written as three plain loops that share no code with the breadth-first search. `draw_digraph` draws every arc as an arrow with a filled head; the two arrows of a two-way channel run side by side, and `arrow_points` computes the ends and the corners of each arrowhead.
 
 ## Modular arithmetic and the group (module `group_theory`)
 
@@ -207,7 +213,7 @@ Three attackers are simulated. `eavesdrop_dh` sees $p$, $g$, $A$ and $B$ and com
 
 ## The test suite
 
-Every part has a test file of automatic checks that print PASS or FAIL lines. All 14 test files that need no figure window were run in GNU Octave 8.4 and every check passed.
+Every part has a test file of automatic checks that print PASS or FAIL lines. All 15 test files that need no figure window were run in GNU Octave 8.4 and every check passed.
 
 | Test file | Part tested | Checks passed |
 |:--|:--|:--:|
@@ -215,6 +221,7 @@ Every part has a test file of automatic checks that print PASS or FAIL lines. Al
 | `test_relations` | Relations and their properties | 51 of 51 |
 | `test_cipher` | Encryption and decryption as functions | 50 of 50 |
 | `test_graph` | Graph, adjacency matrix and list | 51 of 51 |
+| `test_digraph` | Directed graph, strong components, arrows, picture options | 102 of 102 |
 | `test_modular` | Fast power, gcd, inverse | 130 of 130 |
 | `test_group` | Group rules, orders, generators | 131 of 131 |
 | `test_dh` | Diffie–Hellman | 71 of 71 |
@@ -225,11 +232,11 @@ Every part has a test file of automatic checks that print PASS or FAIL lines. Al
 | `test_rsa_users` | RSA users, key transport, eavesdroppers | 188 of 188 |
 | `test_rsa_verification` | Verification of RSA | 27 of 27 |
 | `test_main_demo` | The typed demo (without the keyboard) | 59 of 59 |
-| **Total** | | **1,094 of 1,094** |
+| **Total** | | **1,196 of 1,196** |
 
 Table: Table 3. Results of the test suite in GNU Octave 8.4.
 
-Three more test files (`test_graph_analysis`, `test_graph_pictures` and `test_route_picture`) draw figures and are run in MATLAB by the team. The tests never write into the `outputs` folder: the pictures are drawn with the figure hidden and saved in a temporary folder. The tests also check that bad input is refused, for example a prime $p$ that is not prime, a generator that is not a generator, a secret number out of range, or a text with a character outside the alphabet.
+Four more test files (`test_graph_analysis`, `test_graph_pictures`, `test_digraph_pictures` and `test_route_picture`) draw figures and are run in MATLAB by the team. `test_digraph_pictures` (26 checks) was also run once in GNU Octave with the gnuplot graphics toolkit, where all 26 passed; this is not a MATLAB run. The tests never write into the `outputs` folder: the pictures are drawn with the figure hidden and saved in a temporary folder. The tests also check that bad input is refused, for example a prime $p$ that is not prime, a generator that is not a generator, a secret number out of range, or a text with a character outside the alphabet.
 
 ## The Diffie–Hellman key exchange
 
@@ -311,11 +318,19 @@ The same demo text encrypts to 36 numbers from 0 to 3232, the first being $46^{1
 
 Table: Table 7. The RSA keys of the six users (only $n$ and $e$ are public).
 
+## The directed graph
+
+The directed version of the network (`demo_point2d`, `show_digraph`) has the same six channels as $G$. Two of them work both ways (Alice – Bob and Dave – Frank) and four work one way only, so the digraph has 8 arcs: Alice → Bob, Bob → Alice, Bob → Dave, Carol → Alice, Dave → Carol, Dave → Frank, Frank → Dave and Frank → Grace. The adjacency matrix is not symmetric. The out-degrees of Alice, Bob, Carol, Dave, Frank and Grace are 1, 2, 1, 2, 2 and 0, the in-degrees are 2, 1, 1, 2, 1 and 1, and both sums are 8, the number of arcs.
+
+The directions change the distances. From Alice to Carol the shortest directed path is Alice → Bob → Dave → Carol (3 arcs), while from Carol to Alice it is the single arc Carol → Alice (1 arc), so the distance table is not symmetric. From Alice to Grace the path is Alice → Bob → Dave → Frank → Grace (4 arcs), but Grace has no arc leaving her, so there is no path from Grace to anybody else. Alice, Bob, Carol, Dave and Frank can reach all six users, and Grace can reach only herself.
+
+Therefore the digraph has two strongly connected components, {Alice, Bob, Carol, Dave, Frank} and {Grace}, and one weakly connected component (the same single group as the undirected graph). The directed cycle Alice → Bob → Dave → Carol → Alice keeps the first five users together. `show_digraph` ends with eight checks, and all of them say yes in the Octave run. One of them compares the reachable users found by breadth-first search with those found by Warshall's algorithm, and another compares the strong components with the groups found from the Warshall matrix. The tests also check the numbers above, the refusal of bad arc lists, a digraph with all channels two-way (strongly connected, symmetric matrix) and a digraph with only one-way channels (six components of one user each).
+
 ## Figures of the network
 
-Six pictures show the network of the six users. Figures 6 to 10 are made by `demo_point2` and Figure 11 by option 7 of `main_demo`. In every picture the users keep the places that `graph_layout` gives for the whole network, so only the colors, the line widths, the line styles and the title change from one picture to the next. The channels are numbered e1 to e6 in the order Alice–Bob, Alice–Carol, Bob–Dave, Carol–Dave, Dave–Frank and Frank–Grace.
+Eight pictures show the network of the six users. Figures 6 to 10 are made by `demo_point2`, Figure 11 by option 7 of `main_demo`, and Figures 12 to 14 (the directed graph) by `demo_point2d`. In every picture the users keep the places that `graph_layout` gives for the whole network, so only the colors, the line widths, the line styles and the title change from one picture to the next. The channels are numbered e1 to e6 in the order Alice–Bob, Alice–Carol, Bob–Dave, Carol–Dave, Dave–Frank and Frank–Grace.
 
-*Note on these figures.* The six pictures in this version of the report were not copied from MATLAB windows. A separate plotting script (`handoff/make_figures.py`) drew them from the places, colors, line widths and titles that the MATLAB functions `graph_layout`, `picture_options` and `route_picture_options` compute (these values were read out with GNU Octave, which cannot open figure windows). They have the layout and the colors of `draw_network`, and they will be replaced by the PNG files that `demo_point2` and `main_demo` save in MATLAB (same file names) after the run on the demo laptop.
+*Note on these figures.* Figures 12 to 14 are the PNG files that the project function `save_digraph_pictures` wrote when it was run in GNU Octave with the gnuplot graphics toolkit; they are drawn by the real drawing code but not by MATLAB, and they will be replaced by the PNG files of `demo_point2d` after the run on the demo laptop. The six other pictures in this version of the report were not copied from MATLAB windows. A separate plotting script (`handoff/make_figures.py`) drew them from the places, colors, line widths and titles that the MATLAB functions `graph_layout`, `picture_options` and `route_picture_options` compute (these values were read out with GNU Octave, which cannot open figure windows). They have the layout and the colors of `draw_network`, and they will be replaced by the PNG files that `demo_point2` and `main_demo` save in MATLAB (same file names) after the run on the demo laptop.
 
 ![Figure 6. The communication network: the users are the vertices and the six channels are the edges (`point2_network.png`).](docs/report_figures/point2_network.png){width=14cm}
 
@@ -328,6 +343,12 @@ Six pictures show the network of the six users. Figures 6 to 10 are made by `dem
 ![Figure 10. The network after the bridge channel Dave – Frank is removed (dotted): two groups of users, {Alice, Bob, Carol, Dave} and {Frank, Grace}, one color each (`point2_split.png`).](docs/report_figures/point2_split.png){width=14cm}
 
 ![Figure 11. The route of the message from Alice to Grace in `main_demo` (option 7). The thick green channels e1, e3, e5 and e6 carry it with the keys 85, 42, 32 and 72; Alice and Grace are dark green, Bob, Dave and Frank light green, and Carol is not on the route (`point5_route.png`).](docs/report_figures/point5_route.png){width=14cm}
+
+![Figure 12. The directed network: the 8 arcs a1 to a8 are arrows. The two arrows of a two-way channel run side by side (gray), and the one-way channels are blue (`point2d_digraph.png`).](docs/report_figures/point2d_digraph.png){width=14cm}
+
+![Figure 13. The shortest directed path from Alice to Grace, 4 arcs (green). There is no path back from Grace to Alice (`point2d_path.png`).](docs/report_figures/point2d_path.png){width=14cm}
+
+![Figure 14. The strongly connected components: {Alice, Bob, Carol, Dave, Frank} and {Grace}. The only arc between the two groups, Frank → Grace, is red (`point2d_strong.png`).](docs/report_figures/point2d_strong.png){width=14cm}
 
 # Security analysis and limitations
 
@@ -352,13 +373,13 @@ The number of tries grows with the square root of $n$. A modulus of 2048 bits (a
 2. *No authentication.* A Diffie–Hellman exchange without signatures or certificates can be attacked by a person in the middle who runs two exchanges. This is not simulated.
 3. *Textbook RSA.* The encryption has no padding, so equal characters give equal numbers, and the list of all small numbers (`eavesdrop_codebook`) reads the message without factoring $n$.
 4. *Small numbers.* The prime is limited to $2^{26}$ so that `mod_pow` stays exact in double-precision arithmetic.
-5. *Undirected graph.* All channels are two-way (Section 2.2).
+5. *One example of directions.* The digraph uses one fixed choice of directions for the six channels (changeable in `define_digraph`). The routing of Section 5.4 still uses the undirected graph, because the encrypted channels are two-way; the digraph is analysed and drawn but does not route messages.
 
 # Conclusion and future work
 
-The project connects four topics of discrete mathematics in one working program. Sets, relations and functions describe the users and the cipher. Graph theory finds the route of a message and the weak points of the network. Group theory explains why the Diffie–Hellman key is the same on both sides, and why RSA decrypts correctly. Number theory supplies the algorithms that make it fast. The result is a 116-file MATLAB program with 1,094 automatic checks that pass in GNU Octave, and a verification layer that checks the key, the decryption, the graph and RSA a second way. The simulated attackers show that the small numbers give no protection, which is the main lesson of the model.
+The project connects four topics of discrete mathematics in one working program. Sets, relations and functions describe the users and the cipher. Graph theory finds the route of a message and the weak points of the network. Group theory explains why the Diffie–Hellman key is the same on both sides, and why RSA decrypts correctly. Number theory supplies the algorithms that make it fast. The result is a 128-file MATLAB program with 1,196 automatic checks that pass in GNU Octave, and a verification layer that checks the key, the decryption, the graph and RSA a second way. The simulated attackers show that the small numbers give no protection, which is the main lesson of the model.
 
-Possible future work: use a modulus with big integers (so that real sizes can be shown), add padding to RSA, authenticate the Diffie–Hellman exchange with signatures, encrypt end to end instead of hop by hop, use elliptic-curve groups instead of $\mathbb{Z}_p^{*}$, and add directed channels to the graph model.
+Possible future work: use a modulus with big integers (so that real sizes can be shown), add padding to RSA, authenticate the Diffie–Hellman exchange with signatures, encrypt end to end instead of hop by hop, use elliptic-curve groups instead of $\mathbb{Z}_p^{*}$, and let the routing follow the directed channels of the digraph.
 
 # References {.unnumbered}
 
@@ -381,7 +402,7 @@ Possible future work: use a modulus with big integers (so that real sizes can be
 1. Open MATLAB and set the current folder to the project folder.
 2. Run `setup_project` to add the code folders to the MATLAB path.
 3. Run `run_all_tests`; it ends with ALL TESTS PASSED when everything is correct.
-4. Run the demos: `demo_point1` (sets, relations, functions), `demo_point2` (graph, analysis and 5 pictures, saved in `outputs`), `demo_point3` (modular arithmetic and the group), `demo_point4` (Diffie–Hellman, encryption and the eavesdropper), `demo_point5` (the secure network), `demo_point6` (the verification) and `demo_point7` (RSA).
+4. Run the demos: `demo_point1` (sets, relations, functions), `demo_point2` (graph, analysis and 5 pictures, saved in `outputs`), `demo_point2d` (the directed graph and 3 pictures, saved in `outputs`), `demo_point3` (modular arithmetic and the group), `demo_point4` (Diffie–Hellman, encryption and the eavesdropper), `demo_point5` (the secure network), `demo_point6` (the verification) and `demo_point7` (RSA).
 5. Run `main_demo` for the demo with typed prompts. Choose option 1 to send a message, option 4 to break a channel, option 5 to repair, option 7 to draw the picture of the route (saved as `outputs/point5_route.png`), and option 0 to quit.
 
 The README of the project folder lists the same commands, and `PROGRESS.md` records every design decision. The seminar slides are in `docs/Crypto_Microproject_Presentation.pptx` and the flowcharts in `docs/flowcharts`.
@@ -393,11 +414,11 @@ Each function is one file in `src/<module>/`, and the file name is the function 
 | Module | Functions | Printouts and demos |
 |:--|:--|:--|
 | Sets, relations and functions | `cipher_relation`, `decrypt_symbols`, `decrypt_text`, `define_relations`, `define_sets`, `encrypt_symbols`, `encrypt_text`, `function_properties`, `key_inverse`, `pairs_to_matrix`, `relation_properties`, `symbols_to_text`, `text_to_symbols` | `demo_point1`, `show_cipher`, `show_relations`, `show_sets` |
-| Graph network | `adjacency_to_edges`, `adjacency_to_list`, `bfs_search`, `bridge_channels`, `check_picture_files`, `connected_components`, `cut_users`, `cycle_rank`, `define_graph`, `distance_matrix`, `draw_network`, `edges_to_adjacency`, `find_cycle`, `format_groups`, `format_names`, `graph_layout`, `is_connected`, `list_to_adjacency`, `mark_edges`, `path_to_edges`, `picture_options`, `plural_s`, `reachable_from`, `remove_channel`, `remove_user`, `save_network_pictures`, `shortest_path`, `yes_no` | `demo_point2`, `show_analysis`, `show_graph` |
+| Graph network | `adjacency_to_arcs`, `adjacency_to_edges`, `adjacency_to_list`, `arcs_to_adjacency`, `arrow_points`, `bfs_search`, `bridge_channels`, `check_picture_files`, `connected_components`, `cut_users`, `cycle_rank`, `define_digraph`, `define_graph`, `digraph_options`, `distance_matrix`, `draw_digraph`, `draw_network`, `edges_to_adjacency`, `find_cycle`, `format_groups`, `format_names`, `graph_layout`, `is_connected`, `is_strongly_connected`, `list_to_adjacency`, `mark_edges`, `path_to_arcs`, `path_to_edges`, `picture_options`, `plural_s`, `reachable_from`, `remove_channel`, `remove_user`, `save_digraph_pictures`, `save_network_pictures`, `shortest_path`, `strong_components`, `yes_no` | `demo_point2`, `demo_point2d`, `show_analysis`, `show_digraph`, `show_graph` |
 | Group theory and modular arithmetic | `check_group`, `cyclic_subgroup`, `element_order`, `euclid_gcd`, `ext_gcd`, `find_generators`, `group_table`, `is_generator`, `is_prime_number`, `is_whole_number`, `mod_inverse`, `mod_pow`, `prime_factors` | `demo_point3`, `show_cyclic`, `show_group`, `show_modular` |
 | Diffie-Hellman | `check_dh_setup`, `define_secrets`, `dh_exchange`, `dh_key_table`, `dh_public_value`, `dh_shared_key`, `eavesdrop_dh` | `demo_point4`, `show_dh` |
 | Encryption | `format_numbers`, `send_message`, `try_all_keys` | `show_eavesdropper`, `show_encryption` |
 | Integration, demo and verification | `channel_key`, `check_system`, `define_system`, `draw_route_picture`, `main_demo`, `pick_user`, `reach_by_matrix`, `read_answer`, `route_message`, `route_picture_options`, `verify_system` | `demo_point5`, `demo_point6`, `show_route`, `show_route_picture`, `show_system`, `show_verification` |
 | RSA | `check_rsa_setup`, `check_rsa_users`, `define_rsa_users`, `eavesdrop_codebook`, `eavesdrop_rsa`, `rsa_decrypt_number`, `rsa_decrypt_text`, `rsa_encrypt_number`, `rsa_encrypt_text`, `rsa_format_numbers`, `rsa_key_transport`, `rsa_make_keys`, `rsa_send_message`, `verify_rsa` | `demo_point7`, `show_rsa`, `show_rsa_eavesdropper`, `show_rsa_transport`, `show_rsa_users`, `show_rsa_verification` |
 
-Table: Table 9. The functions of each module (116 files in `src/`).
+Table: Table 9. The functions of each module (128 files in `src/`).

@@ -4,7 +4,7 @@
 % Run from the project folder:  octave --no-gui --eval "run('handoff/collect_checks.m')"
 root = fileparts(fileparts(mfilename('fullpath')));
 cd(root); setup_project;
-names = {'test_sets','test_relations','test_cipher','test_graph','test_modular', ...
+names = {'test_sets','test_relations','test_cipher','test_graph','test_digraph','test_modular', ...
     'test_group','test_dh','test_encryption','test_system','test_verification', ...
     'test_rsa','test_rsa_users','test_rsa_verification','test_main_demo'};
 tot = 0; totp = 0;
@@ -25,4 +25,4 @@ for k = 1:numel(names)
     end
 end
 printf('TOTAL: %d of %d\n', totp, tot);
-% Not run here (they draw figures): test_graph_analysis, test_graph_pictures, test_route_picture
+% Not run here (they draw figures): test_graph_analysis, test_graph_pictures, test_digraph_pictures, test_route_picture

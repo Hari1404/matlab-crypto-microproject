@@ -6,20 +6,21 @@ updates this file, and makes a new zip.
 
 **The repo is this folder** (`matlab-crypto-microproject/`). It is the same project as
 https://github.com/Hari1404/matlab-crypto-microproject. GitHub has the same content as this
-folder since the push of 2026-10-26 (see "GitHub status" below).
+folder since the pushes of 2026-10-26 (see "GitHub status" below).
 
-## Current checkpoint: CP-03   (zip name: matlab-crypto-microproject_CHECKPOINT_03.zip)
+## Current checkpoint: CP-05   (zip name: matlab-crypto-microproject_CHECKPOINT_05.zip)
 
 ## What is finished (do not redo)
 - Code, Points 0-5 and 7, the verification of Point 6 (verify_system, verify_rsa), the
   5 flowcharts (docs/flowcharts/) and the 11-slide deck (docs/Crypto_Microproject_Presentation.pptx).
-- Real test result in GNU Octave 8.4 (CP-01): **1094 of 1094 checks pass, 0 FAIL lines**
-  in 14 test files (test_sets 25, test_relations 51, test_cipher 50, test_graph 51,
+- Real test result in GNU Octave 8.4 (CP-05): **1196 of 1196 checks pass, 0 FAIL lines**
+  in 15 test files (the 14 files below plus test_digraph 102; CP-01 had 1094 in 14 files: test_sets 25, test_relations 51, test_cipher 50, test_graph 51,
   test_modular 130, test_group 131, test_dh 71, test_encryption 101, test_system 69,
   test_verification 32, test_rsa 109, test_rsa_users 188, test_rsa_verification 27,
   test_main_demo 59).
-- NOT run by Claude (they draw figures, and headless Octave cannot): test_graph_analysis,
-  test_graph_pictures, test_route_picture. A full MATLAB run of the FINAL code is NOT confirmed:
+- NOT part of the 1196 (they draw figures): test_graph_analysis, test_graph_pictures,
+  test_route_picture, test_digraph_pictures. Only test_digraph_pictures was run, once, in Octave with
+  gnuplot (26 of 26 passed, CP-04). The others were not run by Claude. A full MATLAB run of the FINAL code is NOT confirmed:
   the only recorded MATLAB run is packet 6A2 (R2026b, early tests, one fix). The owner's
   "all tests passed" referred to the Octave run above. Treat MATLAB as still to be run.
 
@@ -32,17 +33,14 @@ folder since the push of 2026-10-26 (see "GitHub status" below).
              files), inserted as Figures 6-11 in Section 5.7 with an honest "Note on these
              figures" paragraph. Report rebuilt: 26 pages. The pictures stay STAND-INS until the
              owner replaces them (see docs/report_figures/README.md).
-- [ ] CP-04  Directed graphs: the proposal mentions them, the code is undirected only.
-             OWNER MUST DECIDE: (a) add a small directed-graph packet (2D), or
-             (b) keep undirected and say why in the report (channels are two-way: R1 is
-             symmetric). Until the owner decides, the report uses (b) wording in one
-             short subsection that is easy to change.
-- [ ] CP-05  Final pass: README.md and PROGRESS.md updated (Point 6 ticked, report listed),
-             report re-read against the code, final zip.
-- [x] OWNER  Push this zip's content to GitHub (it had 7C, 6B and the report; GitHub stopped at 7B). Done on 2026-10-26: pushed to main in 2 commits (7C code and tests; then the docs, the report and the hand-off files). The file `octave-workspace` from the zip was NOT pushed (it is an Octave session dump, not project content).
+- [x] CP-04  Directed graphs, option (a), packet 2D: code, tests, pictures, report (see log).
+- [x] CP-05  Final pass: README.md, PROGRESS.md, report re-read against the code (keys, RSA
+             n = 3233 and d = 2753, verification 21 and 15 checks, user keys of Table 7), report
+             rebuilt (28 pages). Next zip made.
+- [x] OWNER  Push this zip's content to GitHub. Done on 2026-10-26: 7C, 6B and the report (CP-03 content) were pushed first; then 2D (directed graphs) and the updated report (CP-05 content). GitHub main has everything in this folder.
 - [ ] OWNER  On the demo laptop in MATLAB (R2026b): setup_project, run_all_tests (must end with ALL TESTS PASSED), demo_point2, main_demo (option 7),
-             then copy the real PNGs from outputs/ over docs/report_figures/ (same file names), delete the
-             "Note on these figures" paragraph in Section 5.7 of the markdown, and run handoff/build_report.py.
+             also demo_point2d and the tests, then copy the real PNGs from outputs/ over docs/report_figures/ (same file names), delete the
+             "Note on these figures" paragraph in Section 5.8 of the markdown, and run handoff/build_report.py.
 
 ## How to continue (for the next instance)
 1. Unzip, read this file, then PROGRESS.md "Locked decisions" if you touch any code.
@@ -92,13 +90,11 @@ point2_split.png, point5_route.png), and the report must not claim it is a MATLA
 until the owner has replaced it with the real PNG.
 
 ## GitHub status
-GitHub (main) had packets up to 7B. On 2026-10-26 the rest of this folder was pushed: 7C
-(src/rsa/verify_rsa.m, show_rsa_verification.m, tests/test_rsa_verification.m, demo_point7 and
-run_all_tests changes), 6B (docs/flowcharts, docs/Crypto_Microproject_Presentation.pptx), the
-report (docs/report, docs/Technical_Report.docx and .pdf, docs/report_figures), handoff/, this
-file, and the README/PROGRESS updates. Not pushed: `octave-workspace` (session dump).
-A Claude session can push only when the owner has given that session push access to the repo;
-otherwise the owner pushes.
+GitHub (main) had packets up to 7B. On 2026-10-26 the rest was pushed in 4 commits: 7C (RSA
+verification), 6B (flowcharts, seminar slides, report CP-03 and hand-off files), then 2D
+(directed graphs: 12 files in src/graph_network/, test_digraph, test_digraph_pictures) and the
+report CP-05 update with the README/PROGRESS/handoff changes. A Claude session can push only
+when the owner has given that session push access to the repo; otherwise the owner pushes.
 
 ## Log
 - CP-01: cloned the GitHub repo and compared it with the uploaded zip (zip is ahead by
@@ -122,3 +118,16 @@ otherwise the owner pushes.
   Section 5.7 now has Figures 6-11; the report has 26 pages and the contents page numbers were
   refreshed. libreoffice-math had to be installed again for the PDF equations. The file and line
   counts in Tables 2 and 9 are unchanged (handoff/ is not counted). Next open task: CP-04.
+- CP-04/CP-05: owner chose (a). The first sandbox was lost before delivery, so packet 2D was built
+  again from the CP-03 zip. New in src/graph_network/ (12 files): arcs_to_adjacency,
+  adjacency_to_arcs, define_digraph, strong_components, is_strongly_connected, path_to_arcs,
+  arrow_points, digraph_options, draw_digraph, save_digraph_pictures, show_digraph, demo_point2d.
+  bfs_search, shortest_path, distance_matrix, reachable_from unchanged. tests/test_digraph.m: 102
+  checks; a deliberately broken strong_components made 15 of them fail. Baseline 1196 of 1196, 0
+  FAIL lines (Octave 8.4). gnuplot + ghostscript + freefont fonts let Octave draw: test_digraph_pictures
+  26 of 26 passed in Octave (gnuplot toolkit), NOT in MATLAB. The 3 point2d_*.png in
+  docs/report_figures/ are those Octave renders of the real draw_digraph (not MATLAB, not matplotlib).
+  Report: Sections 2.2, 4.3, new 5.7 (directed graph, numbers from the real show_digraph output),
+  figures now 5.8 with Figures 12-14, limit 5 and future work reworded, counts refreshed (128 files,
+  5,259 lines src; 22 test files, 3,947 lines; 1,196 checks). Not done: the seminar slide deck has no
+  directed-graph line (left as it was). No MATLAB run of the final code exists yet (owner task).
