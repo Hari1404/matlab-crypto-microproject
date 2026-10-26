@@ -8,5 +8,4 @@ codegen/
 *.mexmaci64
 .DS_Store
 Thumbs.db
-packets/*.zip
 outputs/*.png
